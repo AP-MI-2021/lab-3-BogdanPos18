@@ -2,7 +2,8 @@ def printMenu():
     print("1. Citire lista")
     print("2. Determina subsecventa cu proprietatea 1")
     print("3. Determina subsecventa cu proprietatea 2")
-    print("4. Iesire")
+    print("4. Determina subsecventa cu proprietatea 3")
+    print("5. Iesire")
 
 
 def citire_lista():
@@ -128,12 +129,74 @@ def test_get_longest_same_bit_counts():
     assert (get_longest_same_bit_counts([3, 7, 9]) == [3, 7]) is False
 
 
+def palindrom(x):
+    '''
+    Verifica daca un nr dat x este palindrom
+    :param x: nr intreg
+    :return: True, daca nr este palindrom, False in caz contrar
+    '''
+    y = x
+    inv = 0
+    while y:
+        inv = inv * 10 + y % 10
+        y //= 10
+    if x == inv:
+        return True
+    else:
+        return False
+
+
+def test_palindrom():
+    assert palindrom(121) is True
+    assert palindrom(12212) is False
+
+
+def toate_palindroame(list):
+    '''
+    Verifica daca toate elementele dintr-o lista sunt palindroame
+    :param list: lista de nr intregi
+    :return: True, daca toate elementele din lista sunt palindroame, False in caz contrar
+    '''
+    for x in list:
+        if palindrom(x) == 0:
+            return False
+    return True
+
+
+def test_toate_palindroame():
+    assert toate_palindroame([121, 1221, 12221]) is True
+    assert toate_palindroame([121, 1211, 12221]) is False
+
+
+def get_longest_all_palindromes(list):
+    '''
+    Determina cea mai lunga subsecventa cu proprietatea ca toate nr sunt palindroame
+    :param list: lista de nr intregi
+    :return: cea mai lunga subsecventa de palindroame
+    '''
+    subsecventaMax = []
+    for i in range(0, len(list)):
+        for j in range(i, len(list)):
+            if toate_palindroame(list[i:j+1]) and len(list[i:j+1]) > len(subsecventaMax):
+                subsecventaMax = list[i:j+1]
+    return subsecventaMax
+
+
+def test_get_longest_all_palindromes():
+    assert (get_longest_all_palindromes([121, 1221, 12221, 34, 56]) == [121, 1221, 12221]) is True
+    assert (get_longest_all_palindromes([1, 2, 3, 4]) == []) is False
+    assert (get_longest_all_palindromes([1, 2, 3, 131, 1431]) == [1, 2, 3, 131]) is True
+
+
 def main():
     test_patrat_perfect()
     test_toate_patrate_perfecte()
     test_get_longest_all_perfect_squares()
     test_same_bit_count()
     test_get_longest_same_bit_counts()
+    test_palindrom()
+    test_toate_palindroame()
+    test_get_longest_all_palindromes()
     list = []
     while True:
         printMenu()
@@ -144,6 +207,8 @@ def main():
             print(get_longest_all_perfect_squares(list))
         elif optiune == '3':
             print(get_longest_same_bit_counts(list))
+        elif optiune == '4':
+            print(get_longest_all_palindromes(list))
         else:
             break
 
